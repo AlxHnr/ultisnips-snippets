@@ -20,7 +20,8 @@ snip.rv = f_def
 `${1:`!p
 
 # text inside parenthesis.
-snip.rv = generate_function_parameters()
+if snip.c == "":
+	snip.rv = generate_function_parameters()
 
 `})`!p
 

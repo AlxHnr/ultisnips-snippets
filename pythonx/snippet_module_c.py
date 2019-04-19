@@ -13,7 +13,7 @@ def get_function_definition():
   current_buffer = vim.current.buffer
   current_line_num = int(vim.eval("line('.')")) - 1
 
-  fun_match = re.match("^([_a-zA-Z]\w*)[\s\*]+([_a-zA-Z]\w*)([^\(=]*)\(", \
+  fun_match = re.match("^([_a-zA-Z](\w|[:<>])*)(\s|\*)+([_a-zA-Z]\w*)([^\(=]*)\(", \
                        current_buffer[current_line_num])
 
   if not fun_match:
@@ -24,10 +24,10 @@ def get_function_definition():
 def build_function_match(function_definition):
   # replace all whitespaces in 'function_definition' with '\s+' to generate
   # a search pattern, to search in the header for the function definition.
-  function_match = re.sub("\s+", "\\s+", function_definition)
-  function_match = re.sub("\(", "\\(", function_match)
-  function_match = re.sub("\)", "\\)", function_match)
-  function_match = re.sub("\*", "[\*\s]*", function_match)
+  function_match = re.sub("\s+", "\\\\s+", function_definition)
+  function_match = re.sub("\(", "\\\\(", function_match)
+  function_match = re.sub("\)", "\\\\)", function_match)
+  function_match = re.sub("\*", "[\\\\*\\\\s]*", function_match)
 
   # this allows the function definition to match the function
   # definition in the header. It simply ignores prefixed specifier
@@ -66,8 +66,9 @@ def get_function_parameters(buffer, index):
   paren_count = \
       function_parameter.count("(") + 1 - function_parameter.count(")")
 
+  post_paren = "\)+[; ]*([\{\=].*)?$"
   if paren_count <= 0:
-    parameters = re.sub("\)+;*$", "", function_parameter)
+    parameters = re.sub(post_paren, "", function_parameter)
     if parameters:
       return parameters
     else:
@@ -85,7 +86,7 @@ def get_function_parameters(buffer, index):
     paren_count += tmp_line.count("(")
     paren_count -= tmp_line.count(")")
     if paren_count <= 0:
-      parameters += re.sub("\)+;*$", "", tmp_line)
+      parameters += re.sub(post_paren, "", tmp_line)
       break
     else:
       parameters += tmp_line + "\n"
@@ -142,6 +143,7 @@ def generate_function_parameters():
       header_file_handle.close()
 
     # search in header for the function definition.
+    function_found = None
     for index,header_line in enumerate(header_file):
       function_found = function_match.match(header_line)
       if function_found:

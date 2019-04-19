@@ -17,9 +17,9 @@ if snip.c == "":
 	pre_indented = re.search("^(\s*)", current_buffer[next_line_nr]).groups()[0]
 	if not re.match("^\s*\/\*\*\s*$", current_buffer[next_line_nr - 1]):
 		snip.rv = " */"
-	elif re.match("^\s*([_a-zA-Z:][\w:]*)[\s\*]+([_a-zA-Z:][\w:]*)([^\(=]*)\(", \
+	elif re.match("^\s*([_a-zA-Z](\w|[:<>])*)[\s\*\&]+([_a-zA-Z:][\w:]*)([^\(=]*)\(", \
 					 current_buffer[next_line_nr]) and \
-					 not re.match("^.*\.h(pp)?$", current_buffer.name):
+					 not re.match("^.*\.h?$", current_buffer.name):
 		# Non-header Function documentation.
 		parameters = get_function_parameters(vim.current.buffer, next_line_nr)
 
@@ -31,7 +31,7 @@ if snip.c == "":
 			 snip.rv += "\n" + pre_indented + get_indention_string(2) + "@param "
 			 snip.rv += re.sub(".*\s+[\*&]*", "", param) + " "
 
-		if re.match("^(\S+\s+|\s*)void\s+[^\*]*\(", current_buffer[next_line_nr]):
+		if re.match("^\s*(\S+\s+)?void\s+[^\*]*\(", current_buffer[next_line_nr]):
 			snip.rv += "\n" + pre_indented + "*/"
 		else:
 			snip.rv += "\n\n" + pre_indented + get_indention_string(2)
