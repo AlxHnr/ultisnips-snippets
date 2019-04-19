@@ -1,0 +1,31 @@
+global !p
+from snippet_module_c import *
+endglobal
+
+snippet if "A simple if condition"
+if(${1})
+{
+	${0}
+}
+endsnippet
+snippet else "A simple else condition" b
+else
+{
+	${0}
+}
+endsnippet
+snippet switch "A simple switch condition" b
+switch(${1})
+{
+	${0}
+}
+endsnippet
+snippet cs "A case block inside a switch condition" b
+case ${1}:
+	${0}
+endsnippet
+snippet csb "A case block inside a switch condition with a break" b
+case ${1}:
+	${0}
+	break;
+endsnippet

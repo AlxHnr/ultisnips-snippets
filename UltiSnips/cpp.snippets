@@ -1,0 +1,70 @@
+extends c
+priority 1
+
+global !p
+from snippet_module_base import *
+endglobal
+
+snippet cout "Expands to a print statement"
+std::cout << "${1}" << std::endl;
+endsnippet
+snippet cerr "Expands to a print statement"
+std::cerr << "${1}" << std::endl;
+endsnippet
+
+snippet inc "C++ include placeholder" b
+#include <${1}>
+endsnippet
+snippet inq "C++ include placeholder" b
+#include "${1}.hpp"
+endsnippet
+
+snippet ns "Expands to a namespace" b
+namespace ${1:`!p
+snip.rv = get_pascal_case(snip.basename)
+`}
+{
+	${0}
+}
+endsnippet
+snippet class "Expands to a class skeleton" b
+class ${1:`!p
+snip.rv = get_pascal_case(snip.basename)
+`}
+{
+	public:
+	$1();
+	~$1();
+};
+endsnippet
+snippet enum "Expands to an enum class" b
+enum class ${1:`!p snip.rv = get_pascal_case(snip.basename)`}
+{
+	${0}
+};
+endsnippet
+snippet up "std::unique_ptr<...>" w
+std::unique_ptr<${1}>
+endsnippet
+snippet mu "std::make_unique<...>" w
+std::make_unique<${1}>
+endsnippet
+snippet sp "std::shared_ptr<...>" w
+std::shared_ptr<${1}>
+endsnippet
+snippet ms "std::make_shared<...>" w
+std::make_shared<${1}>
+endsnippet
+snippet errno "Expands to throwing an errno message" b
+throw std::system_error(errno, std::system_category(), ${1:message});
+endsnippet
+snippet runtime "Expands to throwing an runtime error" b
+throw std::runtime_error(${1:message});
+endsnippet
+
+snippet fore "for each loop skeleton" b
+for(const auto &${1}: ${2})
+{
+	${0}
+}
+endsnippet

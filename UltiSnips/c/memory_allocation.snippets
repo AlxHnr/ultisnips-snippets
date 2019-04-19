@@ -1,0 +1,26 @@
+snippet '([_a-zA-Z]+(\w|-|\.|>|\[|\])*)\s*=\s*(m|gm)al' "A simple malloc snippet" r
+`!p snip.rv = match.group(1) + " = "
+
+if match.group(3) == "m":
+	snip.rv += "ma"
+elif match.group(3) == "gm":
+	snip.rv += "g_ma"
+elif match.group(3) == "":
+	snip.rv += "a"
+
+snip.rv += "lloc("
+
+snip.rv += "sizeof *" + match.group(1)`${1});
+endsnippet
+
+snippet '([_a-zA-Z]+(\w|-|\.|>|\[|\])*)\s*=\s*(r|gr)eal' "A simple realloc snippet" r
+`!p snip.rv = match.group(1) + " = "
+
+if match.group(3) == "r":
+	snip.rv += "r"
+elif match.group(3) == "gr":
+	snip.rv += "g_r"
+
+snip.rv += "ealloc("`${1:`!p snip.rv = match.group(1)
+`}, sizeof *$1 * ${2:1000});
+endsnippet

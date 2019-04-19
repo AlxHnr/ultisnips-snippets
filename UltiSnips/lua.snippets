@@ -1,0 +1,40 @@
+snippet head "Expands to a hashbang" b
+#!/usr/bin/${1:lua}
+endsnippet
+snippet req "Expands to a local module import" b
+local ${2:$1} = require("${1}")
+endsnippet
+snippet fun "Expands to a local function" b
+local function ${1}(${2})
+	${0}
+end
+endsnippet
+
+snippet if "A simple if condition" b
+if ${1} then
+	${0}
+end
+endsnippet
+snippet elseif "A simple elseif condition" b
+elseif ${1} then
+	
+endsnippet
+snippet else "A simple else condition" b
+else
+	
+endsnippet
+snippet while "A simple while loop" b
+while ${1} do
+	${0}
+end
+endsnippet
+snippet for "A simple for loop" b
+for ${1} do
+	${0}
+end
+endsnippet
+snippet fore "A simple for ... in ... loop" b
+for ${1} in ${2} do
+	${0}
+end
+endsnippet

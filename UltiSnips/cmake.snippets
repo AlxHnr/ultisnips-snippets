@@ -1,0 +1,21 @@
+snippet head "Expands to an empty skeleton" b
+cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCE_FILES src/main.cpp)
+add_executable(binary ${SOURCE_FILES})
+endsnippet
+
+snippet set "Expands to set(...)" b
+set(${1})
+endsnippet
+snippet fp "Expands to find_package(...)" b
+find_package(${1} REQUIRED)
+endsnippet
+snippet if "Expands to if(...) ... endif(...)" b
+if(${1})
+	${2}
+endif($1)
+endsnippet

@@ -1,0 +1,29 @@
+global !p
+from snippet_module_base import *
+endglobal
+
+snippet head "Inserts the source code head" b
+/** @file
+	${1}
+*/
+
+`!p
+if not re.match("^.*\.h(pp)?$", snip.fn):
+  snip.rv = "#include \"" + snip.basename + ".h"
+	if re.match("^.*\.cpp$", snip.fn):
+		snip.rv += "pp"
+	snip.rv += "\"\n\n"
+else:
+  try:
+		project_name = os.path.basename(vim.eval("b:build_path"))
+		file_name = os.path.basename(vim.current.buffer.name)
+		header_string = project_name + "_" + file_name
+  except vim.error:
+    header_string = snip.basename
+
+	header_string = get_underscore(header_string).upper()
+  snip.rv = "#ifndef " + header_string + "\n#define " + header_string + "\n\n"
+`${0}`!p
+if re.match(".*\.h(pp)?", snip.fn):
+  snip.rv = "\n\n#endif"`
+endsnippet

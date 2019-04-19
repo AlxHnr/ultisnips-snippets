@@ -1,0 +1,15 @@
+global !p
+from snippet_module_base import *
+from snippet_module_license import *
+endglobal
+
+snippet c "Expands to an empty comment statement"
+`!p snip.rv = get_comment_prefix()`${0}`!p snip.rv = get_comment_postfix()`
+endsnippet
+
+snippet license "Expands to a commented license block" b
+`!p snip.rv = get_license_header()`
+endsnippet
+snippet mitlicense "Expands to a commented MIT license block" b
+`!p snip.rv = get_mit_header()`
+endsnippet

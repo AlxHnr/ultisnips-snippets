@@ -1,0 +1,30 @@
+global !p
+from snippet_module_base import *
+from snippet_module_licenses import *
+
+textwidth = int(vim.eval("&textwidth"))
+
+def padd_t1(offset, padd_string):
+	return (textwidth - len(t[1]) - offset) * padd_string
+endglobal
+
+snippet head "Expands to an empty help page skeleton" b
+*${1:`!p
+if not snip.c:
+	snip.rv = get_lisp_case(snip.basename)`}*`!p
+snip.rv = padd_t1(len(t[2]), " ")`${2:description}
+
+CONTENTS`!p snip.rv = padd_t1(16, " ")`*$1-contents*
+
+  1. Description`!p snip.rv = padd_t1(27, ".")`|$1-description|
+  2. License`!p snip.rv = padd_t1(19, ".")`|$1-license|
+
+===============================================================================
+1. Description`!p snip.rv = padd_t1(25, " ")`*$1-description*
+
+|$1| is a plugin, which ${0:...}
+
+===============================================================================
+2. License`!p snip.rv = padd_t1(17, " ")`*$1-license*
+`!p snip.rv = get_license_header()`
+endsnippet

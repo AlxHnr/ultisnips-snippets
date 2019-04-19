@@ -1,0 +1,23 @@
+global !p
+from snippet_module_c import *
+endglobal
+
+snippet inc "Include global header" b
+#include <${1:stdlib}.h>
+endsnippet
+snippet inq "Include local header" b
+#include "${1:`!p snip.rv = snip.basename`}.h"
+endsnippet
+snippet def "Define a constant or macro" b
+#define 
+endsnippet
+snippet ifdef "Compile time check for a specific define" b
+#ifdef ${1}
+${0}
+#endif
+endsnippet
+snippet ifndef "Check if a constant or macro is defined" b
+#ifndef ${1}
+${0}
+#endif
+endsnippet

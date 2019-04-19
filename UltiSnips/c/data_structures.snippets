@@ -1,0 +1,43 @@
+global !p
+from snippet_module_c import *
+endglobal
+
+snippet tdef "A typedef to an opaque struct" b
+typedef struct ${1:`!p snip.rv = get_pascal_case(snip.basename)`} $1;
+endsnippet
+snippet struct "A simple struct" b
+struct ${1:`!p snip.rv = get_pascal_case(snip.basename)`}
+{
+	${0}
+};
+endsnippet
+snippet tstruct "A typedef struct" b
+typedef struct
+{
+	${0}
+}${1:`!p snip.rv = get_pascal_case(snip.basename)`};
+endsnippet
+snippet enum "A simple enum" b
+enum ${1:`!p snip.rv = get_pascal_case(snip.basename)`}
+{
+	${0}
+};
+endsnippet
+snippet tenum "A typedef of an enum" b
+typedef enum
+{
+	${0}
+}${1:`!p snip.rv = get_pascal_case(snip.basename)`};
+endsnippet
+snippet union "A simple union" b
+union ${1:`!p snip.rv = get_pascal_case(snip.basename)`}
+{
+	${0}
+};
+endsnippet
+snippet tunion "A typedef of an union" b
+typedef union
+{
+	${0}
+}${1:`!p snip.rv = get_pascal_case(snip.basename)`};
+endsnippet

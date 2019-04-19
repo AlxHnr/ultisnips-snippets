@@ -1,0 +1,42 @@
+global !p
+from snippet_module_c import *
+endglobal
+
+snippet d "Expands to a context aware doxygen comment"
+`!p
+if snip.c == "":
+	current_buffer = vim.current.buffer
+	next_line_nr = int(vim.eval("line('.')"))
+
+	if not re.match("^\s*$", current_buffer[next_line_nr - 1]):
+		snip.rv = "/**< "
+	else:
+		snip.rv = "/** "
+`${0}`!p
+if snip.c == "":
+	pre_indented = re.search("^(\s*)", current_buffer[next_line_nr]).groups()[0]
+	if not re.match("^\s*\/\*\*\s*$", current_buffer[next_line_nr - 1]):
+		snip.rv = " */"
+	elif re.match("^\s*([_a-zA-Z:][\w:]*)[\s\*]+([_a-zA-Z:][\w:]*)([^\(=]*)\(", \
+					 current_buffer[next_line_nr]) and \
+					 not re.match("^.*\.h(pp)?$", current_buffer.name):
+		# Non-header Function documentation.
+		parameters = get_function_parameters(vim.current.buffer, next_line_nr)
+
+		if re.match("^\s*(void)?\s*$", parameters):
+			snip.rv = ""
+		else:
+		 snip.rv = "\n"
+		 for param in re.split(",\s*", parameters) or parameters:
+			 snip.rv += "\n" + pre_indented + get_indention_string(2) + "@param "
+			 snip.rv += re.sub(".*\s+[\*&]*", "", param) + " "
+
+		if re.match("^(\S+\s+|\s*)void\s+[^\*]*\(", current_buffer[next_line_nr]):
+			snip.rv += "\n" + pre_indented + "*/"
+		else:
+			snip.rv += "\n\n" + pre_indented + get_indention_string(2)
+			snip.rv += "@return \n" + pre_indented + "*/"
+	else:
+		snip.rv = "\n" + pre_indented + "*/"
+`
+endsnippet

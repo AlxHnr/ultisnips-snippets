@@ -1,0 +1,33 @@
+snippet while "A simple while loop" b
+while(${1})
+{
+	${0}
+}
+endsnippet
+snippet for "A simple for loop" b
+for(${1:size_t} ${2:index} = ${3:0}; `!p
+if t[2] and t[2][0] == '*':
+	snip.rv = t[2][1:] + " != "
+else:
+	snip.rv = t[2] + " < "
+`${4:`!p
+if t[2] and t[2][0] == '*':
+	snip.rv = "NULL"
+else:
+	snip.rv = "SIZE_MAX"
+`}; `!p
+if t[2] and t[2][0] == '*':
+	snip.rv = t[2][1:] + " = " + t[2][1:] + "->next"
+else:
+	snip.rv = t[2] + "++"
+`)
+{
+	${0}
+}
+endsnippet
+snippet do "A simple do loop" b
+do
+{
+	${0}
+}while(${1});
+endsnippet

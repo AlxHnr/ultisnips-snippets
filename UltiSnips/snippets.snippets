@@ -1,0 +1,8 @@
+extends python
+
+snippet sn "Expands to a snippet template" b
+`!p
+snip.rv = "snippet"` ${1} "${2}"${0}
+`!p
+snip.rv = "endsnippet"`
+endsnippet

@@ -1,0 +1,39 @@
+global !p
+from snippet_module_base import *
+endglobal
+
+snippet fun "Expands to a function" b
+function! s:${1}(${2}) " {{{
+	${0}
+endfunction " }}}
+endsnippet
+snippet np "Expands to a new plugin block" b
+" ${1/.*\/(.*)/$1/g}. {{{
+Plug '${1:`!v substitute(@*, '\v\s|\n', '', 'g')`}'${0}
+" ${1/.*\/(.*)/$1/g}. }}}
+endsnippet
+
+snippet if "A simple if condition" b
+if ${1}
+	${0}
+endif
+endsnippet
+snippet elseif "A simpl elseif condition" b
+elseif ${1}
+	
+endsnippet
+snippet else "A simple else condition" b
+else
+	
+endsnippet
+
+snippet while "A simple while loop" b
+while ${1}
+	${0}
+endwhile
+endsnippet
+snippet for "A for loop" b
+for ${1} in ${2}
+	${0}
+endfor
+endsnippet

@@ -1,0 +1,174 @@
+snippet head "Expands to an empty skelleton document" b
+\documentclass[ngerman, 12pt]{scrartcl} % {{{
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{babel}
+% }}}
+
+\begin{document}
+
+${0}
+
+\end{document}
+endsnippet
+snippet headbeamer "Expands to an empty presentation" b
+\documentclass[ngerman]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+
+\beamertemplatenavigationsymbolsempty
+
+\title{${1}}
+\author{${2}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+${0}
+
+\end{document}
+endsnippet
+snippet title "Inserts a title page skeleton" b
+\begin{titlepage} % {{{
+	\begin{center}
+		\textbf{\Huge ${1}}
+	\end{center}
+\end{titlepage} % }}}
+endsnippet
+
+snippet bold "Bold text" w
+\textbf{${1}}
+endsnippet
+snippet emph "\emph{...}" w
+\emph{${1}}
+endsnippet
+snippet verb "\verb|...|" w
+\verb|${1}|
+endsnippet
+snippet sl "Inserts a slash block, like \WORD{...}" w
+\\${1}{${2}}
+endsnippet
+snippet label "Inserts a label placeholder" w
+\label{${1}}
+endsnippet
+snippet cite "\cite{...}" w
+\cite[S.~${1}]{${2}}
+endsnippet
+snippet url "\url{...}" w
+\url{${0}}
+endsnippet
+snippet q "Inserts a quote pair" w
+"\`${0}"'
+endsnippet
+snippet col "Expands to a \color block" w
+{\color{${1}}${0}}
+endsnippet
+snippet fr "\frac{...}{...}" w
+\frac{${1}}{${2}}
+endsnippet
+snippet frac "\frac{...}{...}" w
+$\frac{${1}}{${2}}$
+endsnippet
+snippet vec "\vec{...}" w
+$\vec{${1}}$
+endsnippet
+snippet cref "\cref{...}" w
+\cref{${1}}
+endsnippet
+snippet use "\usepackage{...}" b
+\usepackage${2}{${1}}
+endsnippet
+snippet beg "\begin{...} block" b
+\begin{${1}}
+	${0}
+\end{$1}
+endsnippet
+snippet table "Table block" b
+\begin{tabular}{| l | l |}
+	\hline
+	${0}
+\end{tabular}
+endsnippet
+snippet cen "\begin{center} ..." b
+\begin{center}
+	${0}
+\end{center}
+endsnippet
+snippet frame "\begin{frame} ..." b
+\begin{frame}\frametitle{${1:\secname}}
+	\begin{itemize}
+		${0}
+	\end{itemize}
+\end{frame}
+endsnippet
+snippet fig "\begin{figure} ..." b
+\begin{figure}[h] % {{{
+	${0}\caption{${1}}
+	\label{fig:${2}}
+\end{figure} % }}}
+endsnippet
+snippet list "Expands to a bulleted list" b
+\begin{itemize}
+	${0}
+\end{itemize}
+endsnippet
+snippet minted "Expands to a minted source code block" b
+\begin{minted}{${1}}
+	${0}
+\end{minted}
+endsnippet
+
+snippet multicol "Expands to a two-colum text block" b
+\begin{multicols}{2} % {{{
+	${0}
+
+	\columnbreak
+
+\end{multicols} % }}}
+endsnippet
+snippet tikz "Expands to a tikzpicture block" b
+\begin{tikzpicture}
+	${0}
+\end{tikzpicture}
+endsnippet
+snippet chap "\chapter{...}" b
+\chapter{${1}} % {{{
+${0}
+% }}}
+endsnippet
+snippet sec "\section{...}" b
+\section{${1}} % {{{
+${0}
+% }}}
+endsnippet
+snippet sub "\subsection{...}" b
+\subsection{${1}} % {{{
+${0}
+% }}}
+endsnippet
+snippet subsub "\subsubsection{...}" b
+\subsubsection{${1}} % {{{
+${0}
+% }}}
+endsnippet
+snippet np "\newpage"
+\newpage
+endsnippet
+snippet it "\item" b
+\item 
+endsnippet
+snippet subit "\subitem" b
+\subitem 
+endsnippet
+snippet vspace "\vspace*{\fill}"
+\vspace*{\fill}
+endsnippet
+snippet incg "\includegraphics ..." w
+\includegraphics[width = \textwidth]{${1}.png}
+endsnippet
+snippet tfn "Expands to a tiny footnote text"
+\footnotetext{\tiny ${0}}
+endsnippet
