@@ -19,7 +19,7 @@ else:
 		file_name = os.path.basename(vim.current.buffer.name)
 		header_string = project_name + "_" + file_name
   except vim.error:
-    header_string = snip.basename
+    header_string = snip.fn
 
 	header_string = get_underscore(header_string).upper()
   snip.rv = "#ifndef " + header_string + "\n#define " + header_string + "\n\n"
