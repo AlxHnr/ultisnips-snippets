@@ -85,9 +85,8 @@ def get_underscore(string):
   return delimiter_seperate(string, "_")
 
 def get_pascal_case(string):
-  return re.sub(r'\W*(\w+)\W*',
-      lambda match: match.group(1).capitalize(),
-      string)
+  parts = re.findall(r'[A-Z]*[a-z0-9]+|[A-Z]+', string)
+  return ''.join(w[0].upper() + w[1:] for w in parts)
 
 def get_camel_case(string):
   pascal_case = get_pascal_case(string)
