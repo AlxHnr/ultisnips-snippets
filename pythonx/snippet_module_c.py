@@ -128,7 +128,7 @@ def generate_function_parameters():
 
     # open file, if its not found in opened buffers, or if Vims buffer
     # cache is empty.
-    if header_file is None or (len(buffer) == 1 and len(buffer[0]) == 0):
+    if header_file is None or len(header_file) <= 1:
       try:
         header_file_handle = open(header_file_path, "r")
       except IOError:
