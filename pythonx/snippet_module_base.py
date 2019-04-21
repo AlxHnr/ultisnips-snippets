@@ -65,10 +65,6 @@ def get_commented_textblock(string_list):
   return re.sub("[\t ]+\n", "\n",
       re.sub("\n\s+\n", "\n\n", commented_string))
 
-# returns the parent directory name from 'path'.
-def get_parent_dirname(path):
-  return os.path.basename(os.path.dirname(os.path.realpath(path)))
-
 # lowercases 'string' and seperate by 'seperator'. I.e. if 'seperator' is
 # '_' then "CamelCase" will become "camel_case".
 def delimiter_seperate(string, seperator):
