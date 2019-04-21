@@ -1,4 +1,5 @@
 global !p
+from pathlib import Path
 from snippet_module_base import *
 endglobal
 
@@ -14,15 +15,20 @@ if not re.match("^.*\.h(pp)?$", snip.fn):
 		snip.rv += "pp"
 	snip.rv += "\"\n\n"
 else:
-  try:
-		project_name = os.path.basename(vim.eval("b:build_path"))
-		file_name = os.path.basename(vim.current.buffer.name)
-		header_string = project_name + "_" + file_name
-  except vim.error:
-    header_string = snip.fn
+	buffer_cwd = Path(vim.eval("getcwd()"))
+	buffer_path = Path(vim.current.buffer.name)
+
+	if buffer_cwd in buffer_path.parents and \
+			buffer_cwd != buffer_path.parent:
+		header_string = os.path.basename(buffer_cwd)
+		header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
+	else:
+		header_string = snip.fn
 
 	header_string = get_underscore(header_string).upper()
-  snip.rv = "#ifndef " + header_string + "\n#define " + header_string + "\n\n"
+
+	snip.rv = "#ifndef " + header_string + "\n"
+	snip.rv += "#define " + header_string + "\n\n"
 `${0}`!p
 if re.match(".*\.h(pp)?", snip.fn):
   snip.rv = "\n\n#endif"`
