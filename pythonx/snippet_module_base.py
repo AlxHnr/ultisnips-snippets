@@ -26,7 +26,7 @@ def get_comment_postfix():
     return ""
 
   postfix = commentMarks[1]
-  if not re.match("^\s", postfix):
+  if postfix and not re.match("^\s", postfix):
     postfix = " " + postfix
 
   return postfix
