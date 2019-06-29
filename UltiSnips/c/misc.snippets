@@ -1,6 +1,21 @@
 global !p
 from pathlib import Path
 from snippet_module_base import *
+
+def includeGuardString():
+	buffer_cwd = Path(vim.eval("getcwd()"))
+	buffer_path = Path(vim.current.buffer.name)
+
+	if buffer_cwd in buffer_path.parents and \
+			buffer_cwd != buffer_path.parent:
+		header_string = os.path.basename(buffer_cwd)
+		header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
+	else:
+		header_string = snip.fn
+
+	header_string = get_underscore(header_string).upper()
+
+	return "#ifndef " + header_string + "\n" + "#define " + header_string
 endglobal
 
 snippet head "Inserts the source code head" b
@@ -15,21 +30,11 @@ if not re.match("^.*\.h(pp)?$", snip.fn):
 		snip.rv += "pp"
 	snip.rv += "\"\n\n"
 else:
-	buffer_cwd = Path(vim.eval("getcwd()"))
-	buffer_path = Path(vim.current.buffer.name)
-
-	if buffer_cwd in buffer_path.parents and \
-			buffer_cwd != buffer_path.parent:
-		header_string = os.path.basename(buffer_cwd)
-		header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
-	else:
-		header_string = snip.fn
-
-	header_string = get_underscore(header_string).upper()
-
-	snip.rv = "#ifndef " + header_string + "\n"
-	snip.rv += "#define " + header_string + "\n\n"
+	snip.rv = includeGuardString() + "\n\n"
 `${0}`!p
 if re.match(".*\.h(pp)?", snip.fn):
   snip.rv = "\n\n#endif"`
+endsnippet
+snippet ig "Inserts include guard defines"
+`!p snip.rv = includeGuardString()`
 endsnippet
