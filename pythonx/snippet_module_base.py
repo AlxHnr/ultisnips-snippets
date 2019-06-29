@@ -9,8 +9,8 @@ def get_indention_string(length):
     return " " * length
   else:
     tabstop = int(vim.eval("&tabstop"))
-    tab_amount = (length - length % tabstop) / tabstop
-    spaces_amount = length % tabstop
+    tab_amount = int((length - length % tabstop) / tabstop)
+    spaces_amount = int(length % tabstop)
     return "\t" * tab_amount + " " * spaces_amount
 
 def get_comment_prefix():
