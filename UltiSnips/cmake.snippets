@@ -14,8 +14,16 @@ endsnippet
 snippet fp "Expands to find_package(...)" b
 find_package(${1} REQUIRED)
 endsnippet
-snippet if "Expands to if(...) ... endif(...)" b
+snippet if "Expands to if(...) ... endif()" b
 if(${1})
 	${2}
-endif($1)
+endif()
+endsnippet
+snippet elseif "Expands to elseif(...)" b
+elseif(${1})
+	
+endsnippet
+snippet else "Expands to else(...)" b
+else(${1})
+	
 endsnippet
