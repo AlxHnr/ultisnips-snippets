@@ -1,5 +1,28 @@
 global !p
 from snippet_module_c import *
+import vim
+
+def format_options_have_comment_leader():
+  options = vim.eval("&formatoptions")
+  return 'r' in options or 'o' in options
+
+def get_doc_empty_line(pre_indented):
+  if format_options_have_comment_leader():
+    return '\n' + pre_indented + ' *'
+  else:
+    return '\n'
+
+def get_doc_last_line(pre_indented):
+  if format_options_have_comment_leader():
+    return "\n" + pre_indented + " */"
+  else:
+    return "\n" + pre_indented + "*/"
+
+def get_doc_prefix():
+  if format_options_have_comment_leader():
+    return ' * '
+  else:
+    return '  '
 endglobal
 
 snippet d "Expands to a context aware doxygen comment"
@@ -20,23 +43,24 @@ if snip.c == "":
   elif re.match("^\s*([_a-zA-Z](\w|[:<>])*)[\s\*\&]+([_a-zA-Z:][\w:]*)([^\(=]*)\(", \
           current_buffer[next_line_nr]) and \
           not re.match("^.*\.h?$", current_buffer.name):
-    # Non-header Function documentation.
+    # Function documentation.
     parameters = get_function_parameters(vim.current.buffer, next_line_nr)
 
     if re.match("^\s*(void)?\s*$", parameters):
       snip.rv = ""
     else:
-      snip.rv = "\n"
+      snip.rv = get_doc_empty_line(pre_indented)
       for param in re.split(",\s*", parameters) or parameters:
-        snip.rv += "\n" + pre_indented + get_indention_string(2) + "@param "
+        snip.rv += "\n" + pre_indented + get_doc_prefix() + "@param "
         snip.rv += re.sub(".*\s+[\*&]*", "", param) + " "
 
     if re.match("^\s*(\S+\s+)?void\s+[^\*]*\(", current_buffer[next_line_nr]):
-      snip.rv += "\n" + pre_indented + "*/"
+      snip.rv += get_doc_last_line(pre_indented)
     else:
-      snip.rv += "\n\n" + pre_indented + get_indention_string(2)
-      snip.rv += "@return \n" + pre_indented + "*/"
+      snip.rv += get_doc_empty_line(pre_indented)
+      snip.rv += "\n" + pre_indented + get_doc_prefix()
+      snip.rv += "@return " + get_doc_last_line(pre_indented)
   else:
-    snip.rv = "\n" + pre_indented + "*/"
+    snip.rv = get_doc_last_line(pre_indented)
 `
 endsnippet
