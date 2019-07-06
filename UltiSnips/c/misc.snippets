@@ -3,19 +3,19 @@ from pathlib import Path
 from snippet_module_base import *
 
 def includeGuardString():
-	buffer_cwd = Path(vim.eval("getcwd()"))
-	buffer_path = Path(vim.current.buffer.name)
+  buffer_cwd = Path(vim.eval("getcwd()"))
+  buffer_path = Path(vim.current.buffer.name)
 
-	if buffer_cwd in buffer_path.parents and \
-			buffer_cwd != buffer_path.parent:
-		header_string = os.path.basename(buffer_cwd)
-		header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
-	else:
-		header_string = snip.fn
+  if buffer_cwd in buffer_path.parents and \
+      buffer_cwd != buffer_path.parent:
+    header_string = os.path.basename(buffer_cwd)
+    header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
+  else:
+    header_string = snip.fn
 
-	header_string = get_underscore(header_string).upper()
+  header_string = get_underscore(header_string).upper()
 
-	return "#ifndef " + header_string + "\n" + "#define " + header_string
+  return "#ifndef " + header_string + "\n" + "#define " + header_string
 endglobal
 
 snippet head "Inserts the source code head" b
@@ -26,11 +26,11 @@ snippet head "Inserts the source code head" b
 `!p
 if not re.match("^.*\.h(pp)?$", snip.fn):
   snip.rv = "#include \"" + snip.basename + ".h"
-	if re.match("^.*\.cpp$", snip.fn):
-		snip.rv += "pp"
-	snip.rv += "\"\n\n"
+  if re.match("^.*\.cpp$", snip.fn):
+    snip.rv += "pp"
+  snip.rv += "\"\n\n"
 else:
-	snip.rv = includeGuardString() + "\n\n"
+  snip.rv = includeGuardString() + "\n\n"
 `${0}`!p
 if re.match(".*\.h(pp)?", snip.fn):
   snip.rv = "\n\n#endif"`

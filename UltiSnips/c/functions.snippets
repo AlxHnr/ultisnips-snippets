@@ -5,35 +5,35 @@ endglobal
 snippet '^(\s*)(\w[^\(=]+\()' "Expands to a function" "snip.buffer[snip.line].endswith('(')" re
 `!p
 if snip.c == "":
-	# get clean function definiton without unneeded whitespaces.
-	f_def = re.sub("\s+", " ", match.group(2))
+  # get clean function definiton without unneeded whitespaces.
+  f_def = re.sub("\s+", " ", match.group(2))
 
-	# function definition inside a header file '*.h'.
-	# ensures that function definition starts with 'extern ...'
-	if re.match(".*\.h$", fn) and \
-			 not re.match("^\s*((extern|inline)\s).*", match.group(2)):
-		f_def = "extern " + f_def
-	else:
-		f_def = match.group(1) + f_def
+  # function definition inside a header file '*.h'.
+  # ensures that function definition starts with 'extern ...'
+  if re.match(".*\.h$", fn) and \
+       not re.match("^\s*((extern|inline)\s).*", match.group(2)):
+    f_def = "extern " + f_def
+  else:
+    f_def = match.group(1) + f_def
 
-	snip.rv = f_def
+  snip.rv = f_def
 `${1:`!p
 
 # text inside parenthesis.
 if snip.c == "":
-	snip.rv = generate_function_parameters()
+  snip.rv = generate_function_parameters()
 
 `})`!p
 
 # text after 'functionname(...)'.
 if snip.c == "":
-	if re.match(".*\.h$", fn) and \
-			 not re.match("^\s*inline\s.*", match.group(2)):
-		snip.rv = ";"
-	else:
-		snip.rv = "\n" + match.group(1) + "{\n" + match.group(1) + "  "
+  if re.match(".*\.h$", fn) and \
+       not re.match("^\s*inline\s.*", match.group(2)):
+    snip.rv = ";"
+  else:
+    snip.rv = "\n" + match.group(1) + "{\n" + match.group(1) + "  "
 `${0}`!p
 if snip.c == "":
-	if re.match(".*\.c", fn) or re.match("^\s*inline\s.*", match.group(2)):
-		snip.rv += "\n" + match.group(1) + "}"`
+  if re.match(".*\.c", fn) or re.match("^\s*inline\s.*", match.group(2)):
+    snip.rv += "\n" + match.group(1) + "}"`
 endsnippet
