@@ -1,5 +1,7 @@
+import os
 import re
 import vim
+from pathlib import Path
 from snippet_module_base import *
 
 # build some regex expressions
@@ -155,3 +157,16 @@ def generate_function_parameters():
     return get_function_parameters(header_file, index)
 
   return get_empty_parameters()
+
+def get_current_header_string():
+    buffer_cwd = Path(vim.eval("getcwd()"))
+    buffer_path = Path(vim.current.buffer.name)
+
+    if buffer_cwd in buffer_path.parents and \
+        buffer_cwd != buffer_path.parent:
+      header_string = os.path.basename(buffer_cwd)
+      header_string += "/" + os.path.relpath(buffer_path, buffer_cwd)
+    else:
+      header_string = os.path.basename(vim.current.buffer.name)
+
+    return get_underscore(header_string).upper()
