@@ -170,3 +170,6 @@ def get_current_header_string():
       header_string = os.path.basename(vim.current.buffer.name)
 
     return get_underscore(header_string).upper()
+
+def uses_single_line_c_comments():
+  return vim.eval("&commentstring").startswith("//")

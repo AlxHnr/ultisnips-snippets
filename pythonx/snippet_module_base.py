@@ -31,6 +31,10 @@ def get_comment_postfix():
 
   return postfix
 
+def format_options_have_comment_leader():
+  options = vim.eval("&formatoptions")
+  return 'r' in options or 'o' in options
+
 # Takes a list of strings, which will be commented out and joined to a
 # newline-seperated string. This function will comment out either each
 # line seperatey, or only the first and last line of the block, depending

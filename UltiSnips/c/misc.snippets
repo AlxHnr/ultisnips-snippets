@@ -8,9 +8,21 @@ def includeGuardString():
 endglobal
 
 snippet head "Inserts the source code head" b
-/** @file
-	${1}
-*/
+`!p
+if uses_single_line_c_comments():
+  snip.rv = '/// @file\n/// '
+elif format_options_have_comment_leader():
+  snip.rv = '/** @file\n * '
+else:
+  snip.rv = '/** @file\n  '
+`${1}`!p
+if uses_single_line_c_comments():
+  snip.rv = ''
+elif format_options_have_comment_leader():
+  snip.rv = '\n */'
+else:
+  snip.rv = '\n*/'
+`
 
 `!p
 if not re.match("^.*\.h(pp)?$", snip.fn):

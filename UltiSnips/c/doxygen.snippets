@@ -1,25 +1,34 @@
 global !p
 from snippet_module_c import *
+from snippet_module_base import *
 import vim
 
-def format_options_have_comment_leader():
-  options = vim.eval("&formatoptions")
-  return 'r' in options or 'o' in options
-
 def get_doc_empty_line(pre_indented):
-  if format_options_have_comment_leader():
+  if uses_single_line_c_comments():
+    return '\n' + pre_indented + '///'
+  elif format_options_have_comment_leader():
     return '\n' + pre_indented + ' *'
   else:
     return '\n'
 
-def get_doc_last_line(pre_indented):
-  if format_options_have_comment_leader():
-    return "\n" + pre_indented + " */"
+def get_doc_commend_ending():
+  if uses_single_line_c_comments():
+    return ''
   else:
-    return "\n" + pre_indented + "*/"
+    return "*/"
+
+def get_doc_last_line(pre_indented):
+  if uses_single_line_c_comments():
+    return ''
+  elif format_options_have_comment_leader():
+    return "\n" + pre_indented + " " + get_doc_commend_ending()
+  else:
+    return "\n" + pre_indented + get_doc_commend_ending()
 
 def get_doc_prefix():
-  if format_options_have_comment_leader():
+  if uses_single_line_c_comments():
+    return '/// '
+  elif format_options_have_comment_leader():
     return ' * '
   else:
     return '  '
@@ -31,15 +40,20 @@ if snip.c == "":
   current_buffer = vim.current.buffer
   next_line_nr = int(vim.eval("line('.')"))
 
-  if not re.match("^\s*$", current_buffer[next_line_nr - 1]):
-    snip.rv = "/**< "
+  if uses_single_line_c_comments():
+    prefix = "///"
   else:
-    snip.rv = "/** "
+    prefix = "/**"
+
+  if not re.match("^\s*$", current_buffer[next_line_nr - 1]):
+    snip.rv = prefix + "< "
+  else:
+    snip.rv = prefix + " "
 `${0}`!p
 if snip.c == "":
   pre_indented = re.search("^(\s*)", current_buffer[next_line_nr]).groups()[0]
-  if not re.match("^\s*\/\*\*\s*$", current_buffer[next_line_nr - 1]):
-    snip.rv = " */"
+  if not re.match("^\s*\/(\*\*|\/\/)\s*$", current_buffer[next_line_nr - 1]):
+    snip.rv = " " + get_doc_commend_ending()
   elif re.match("^\s*([_a-zA-Z](\w|[:<>])*)[\s\*\&]+([_a-zA-Z:][\w:]*)([^\(=]*)\(", \
           current_buffer[next_line_nr]) and \
           not re.match("^.*\.h?$", current_buffer.name):
