@@ -12,6 +12,9 @@ snippet np "Expands to a new plugin block" b
 Plug '${1:`!v substitute(@*, '\v\s|\n', '', 'g')`}'${0}
 " ${1/.*\/(.*)/$1/g}. }}}
 endsnippet
+snippet echo "Expands to echo followed by quotes"
+echo '${1}'
+endsnippet
 
 snippet if "A simple if condition" b
 if ${1}
