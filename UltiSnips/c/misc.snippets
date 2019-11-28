@@ -25,12 +25,7 @@ else:
 `
 
 `!p
-if not re.match("^.*\.h(pp)?$", snip.fn):
-  snip.rv = "#include \"" + snip.basename + ".h"
-  if re.match("^.*\.cpp$", snip.fn):
-    snip.rv += "pp"
-  snip.rv += "\"\n\n"
-else:
+if re.match("^.*\.h(pp)?$", snip.fn):
   snip.rv = includeGuardString() + "\n\n"
 `${0}`!p
 if re.match(".*\.h(pp)?", snip.fn):
