@@ -56,17 +56,33 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 		dtor_doc = ""
 		swap_doc = "\n"
 
-	return suffix + "(const " + class_name + " &other);\n" + \
+	if add_implementation:
+		copy_ctor_body = " {}"
+		move_ctor_body = " {}"
+		copy_assgn_body = " {}"
+		move_assgn_body = " {}"
+		dtor_body = " {}"
+		swap_body = "\n" + padding + "{\n" + padding + "  using std::swap;\n" + \
+			padding + "}"
+	else:
+		copy_ctor_body = ";"
+		move_ctor_body = ";"
+		copy_assgn_body = ";"
+		move_assgn_body = ";"
+		dtor_body = ";"
+		swap_body = ";"
+
+	return suffix + "(const " + class_name + " &other)" + copy_ctor_body + "\n" + \
 		move_ctor_doc + "\n" + \
-		padding + identifier +"(" + class_name + " &&other) noexcept;\n" + \
-		copy_assgn_doc + "\n" + \
-		padding + identifier +" &operator=(const " + class_name + " &other);\n" + \
-		move_assgn_doc + "\n" + \
-		padding + class_name +" &operator=(" + class_name + " &&other) noexcept;\n" + \
-		dtor_doc + "\n" + \
-		padding + "~" + identifier +"();\n" + \
-		swap_doc + "\n" + \
-		padding + "friend void swap(" + class_name +" &first, " + class_name +" &second);"
+		padding + identifier +"(" + class_name + " &&other) noexcept" + \
+		move_ctor_body + "\n" + copy_assgn_doc + "\n" + \
+		padding + identifier +" &operator=(const " + class_name + " &other)" + copy_assgn_body + \
+		"\n" + move_assgn_doc + "\n" + \
+		padding + class_name +" &operator=(" + class_name + " &&other) noexcept" + \
+		move_assgn_body + "\n" + dtor_doc + "\n" + \
+		padding + "~" + identifier +"()" + dtor_body + "\n" + swap_doc + "\n" + \
+		padding + "friend void swap(" + class_name +" &first, " + class_name +" &second)" + \
+		swap_body
 endglobal
 
 snippet cout "Expands to a print statement"
