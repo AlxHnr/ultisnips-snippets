@@ -31,16 +31,20 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 
 	suffix = ""
 	identifier = class_name
+	dtor_name = "~" + class_name
+	operator_name = "operator"
 	if out_of_class:
 		suffix = "::" + class_name
 		identifier += suffix
+		dtor_name = class_name + "::~" + class_name
+		operator_name = class_name + "::operator"
 
 	if add_documentation:
-		move_ctor_doc = "\n" + padding + make_constructor_doc(class_name, padding, "Move")
-		copy_assgn_doc = make_assignment_doc(class_name, padding, "Copy", "copied")
-		move_assgn_doc = make_assignment_doc(class_name, padding, "Move", "moved")
+		move_ctor_doc = "\n" + padding + make_constructor_doc(class_name, padding, "Move") + "\n"
+		copy_assgn_doc = "\n" + make_assignment_doc(class_name, padding, "Copy", "copied")
+		move_assgn_doc = make_assignment_doc(class_name, padding, "Move", "moved") + "\n"
 		dtor_doc = "\n" + padding + get_doc_block_start() + \
-			" Destructor of " + class_name + "." + get_doc_commend_ending()
+			" Destructor of " + class_name + "." + get_doc_commend_ending() + "\n"
 		swap_doc = "\n" + padding + get_doc_block_start() + \
 			" Swap function specialisation for " + class_name + " objects." + \
 			get_doc_empty_line(padding) + "\n" + \
@@ -48,7 +52,7 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 			"To be swapped with the second object." + "\n" + \
 			padding + get_doc_prefix() + "@param second " + \
 			"To be swapped with the first object." + \
-			get_doc_last_line(padding)
+			get_doc_last_line(padding) + "\n"
 	else:
 		move_ctor_doc = ""
 		copy_assgn_doc = ""
@@ -62,6 +66,7 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 		copy_assgn_body = " {}"
 		move_assgn_body = " {}"
 		dtor_body = " {}"
+		swap_prefix = ""
 		swap_body = "\n" + padding + "{\n" + padding + "  using std::swap;\n" + \
 			padding + "}"
 	else:
@@ -70,18 +75,19 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 		copy_assgn_body = ";"
 		move_assgn_body = ";"
 		dtor_body = ";"
+		swap_prefix = "friend "
 		swap_body = ";"
 
 	return suffix + "(const " + class_name + " &other)" + copy_ctor_body + "\n" + \
-		move_ctor_doc + "\n" + \
+		move_ctor_doc + \
 		padding + identifier +"(" + class_name + " &&other) noexcept" + \
-		move_ctor_body + "\n" + copy_assgn_doc + "\n" + \
-		padding + identifier +" &operator=(const " + class_name + " &other)" + copy_assgn_body + \
-		"\n" + move_assgn_doc + "\n" + \
-		padding + class_name +" &operator=(" + class_name + " &&other) noexcept" + \
-		move_assgn_body + "\n" + dtor_doc + "\n" + \
-		padding + "~" + identifier +"()" + dtor_body + "\n" + swap_doc + "\n" + \
-		padding + "friend void swap(" + class_name +" &first, " + class_name +" &second)" + \
+		move_ctor_body + copy_assgn_doc + "\n" + \
+		padding + class_name +" &" + operator_name + "=(const " + class_name + " &other)" + \
+		copy_assgn_body + "\n" + move_assgn_doc + \
+		padding + class_name +" &" + operator_name + "=(" + class_name + " &&other) noexcept" + \
+		move_assgn_body + "\n" + dtor_doc + \
+		padding + dtor_name + "()" + dtor_body + "\n" + swap_doc + \
+		padding + swap_prefix + "void swap(" + class_name +" &first, " + class_name +" &second)" + \
 		swap_body
 endglobal
 
@@ -140,10 +146,19 @@ snip.rv = get_pascal_case(snip.basename)
 	${0}
 };
 endsnippet
-snippet bigfive "Expands to the declaration of the big five" b
+snippet bigfive "Expands to the in-class implementation of the big five" b
 `!p snip.rv = make_constructor_doc(t[1], get_padding(), "Copy")`
 ${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
 snip.rv = make_big_five(t[1], True, True, False)`
+endsnippet
+snippet dbigfive "Expands to the declaration of the big five" b
+${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_big_five(t[1], False, False, False)`
+endsnippet
+snippet ibigfive "Expands to the out-of-class implementation of the big five" b
+`!p snip.rv = make_constructor_doc(t[1], get_padding(), "Copy")`
+${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_big_five(t[1], True, True, True)`
 endsnippet
 
 snippet fore "for each loop skeleton" b
