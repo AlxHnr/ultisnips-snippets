@@ -21,6 +21,18 @@ def make_assignment_doc(class_name, padding, constructor_name, constructor_actio
 		padding + get_doc_prefix() + "@param other " + class_name + " to be " + \
 		constructor_action + " into this object." + get_doc_last_line(padding)
 
+def make_comparison_doc(class_name, padding, result_description):
+	return get_doc_block_start() + \
+		" Compare the given " + class_name + " objects." + \
+		get_doc_empty_line(padding) + "\n" + \
+		padding + get_doc_prefix() + "@param first " + \
+		"To be compared to the second object." + "\n" + \
+		padding + get_doc_prefix() + "@param second " + \
+		"To be compared to the first object." + \
+		get_doc_empty_line(padding) + "\n" + padding + get_doc_prefix() + \
+		"@return True if the given objects are " + \
+		result_description + "." + get_doc_last_line(padding)
+
 def get_padding():
 	line_nr = int(vim.eval("line('.')")) - 1
 	return re.search("^(\s*)", vim.current.buffer[line_nr]).groups()[0]
@@ -93,6 +105,43 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 		padding + dtor_name + "()" + dtor_body + "\n" + swap_doc + \
 		padding + swap_prefix + "void swap(" + class_name +" &first, " + class_name +" &second)" + \
 		swap_body
+
+def make_comparison_part1(class_name, add_implementation, add_documentation, out_of_class):
+	padding = get_padding()
+	function_prefix = "friend "
+	if out_of_class:
+		function_prefix = ""
+
+	if add_documentation:
+		equal_doc = make_comparison_doc(class_name, padding, "equal") + "\n" + padding
+	else:
+		equal_doc = ""
+
+	return equal_doc + function_prefix + "bool operator==(const "
+
+def make_comparison_part2(class_name, add_implementation, add_documentation, out_of_class):
+	padding = get_padding()
+
+	function_prefix = "friend "
+	if out_of_class:
+		function_prefix = ""
+
+	if add_documentation:
+		unequal_doc = "\n" + padding + make_comparison_doc(class_name, padding, "different") + "\n"
+	else:
+		unequal_doc = ""
+
+	if add_implementation:
+		equal_body = "\n" + padding + "{\n" + padding + "  return false;\n" + padding + "}"
+		unequal_body = "\n" + padding + "{\n" + padding + "  return !(first == second);\n" + \
+			padding + "}"
+	else:
+		equal_body = ";"
+		unequal_body = ";"
+
+	return " &first, const " + class_name + " &second)" + equal_body + "\n" + \
+		unequal_doc + padding + function_prefix + "bool operator!=(const " + \
+		class_name + " &first, const " + class_name + " &second)" + unequal_body
 endglobal
 
 snippet cout "Expands to a print statement"
@@ -163,6 +212,21 @@ snippet ibigfive "Expands to the out-of-class implementation of the big five" b
 `!p snip.rv = make_constructor_doc(t[1], get_padding(), "Copy")`
 ${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
 snip.rv = make_big_five(t[1], True, True, True)`
+endsnippet
+snippet compare "Expands to the in-class implementation of comparison operators" b
+`!p snip.rv = make_comparison_part1(t[1], True, True, False)
+`${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_comparison_part2(t[1], True, True, False)`
+endsnippet
+snippet dcompare "Expands to the definition of comparison operators" b
+`!p snip.rv = make_comparison_part1(t[1], False, False, False)
+`${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_comparison_part2(t[1], False, False, False)`
+endsnippet
+snippet icompare "Expands to the out-of-class implementation of comparison operators" b
+`!p snip.rv = make_comparison_part1(t[1], True, True, True)
+`${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_comparison_part2(t[1], True, True, True)`
 endsnippet
 
 snippet fore "for each loop skeleton" b
