@@ -63,8 +63,12 @@ def make_big_five(class_name, add_implementation, add_documentation, out_of_clas
 	if add_implementation:
 		copy_ctor_body = " {}"
 		move_ctor_body = " {}"
-		copy_assgn_body = " {}"
-		move_assgn_body = " {}"
+		copy_assgn_body = "\n" + padding + "{\n" + padding + "  " + class_name + \
+			" copy{other};\n" + padding + "  swap(*this, copy);\n" + padding + \
+			"  return *this;\n" + padding + "}"
+		move_assgn_body = "\n" + padding + "{\n" + padding + "  " + class_name + \
+			" tmp{std::move(other)};\n" + padding + "  swap(*this, tmp);\n" + padding + \
+			"  return *this;\n" + padding + "}"
 		dtor_body = " {}"
 		swap_prefix = ""
 		swap_body = "\n" + padding + "{\n" + padding + "  using std::swap;\n" + \
