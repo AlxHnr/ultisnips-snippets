@@ -2,7 +2,71 @@ extends c
 priority 1
 
 global !p
+import vim
 from snippet_module_base import *
+from snippet_module_doxygen import *
+
+def make_constructor_doc(class_name, padding, constructor_name):
+	return get_doc_block_start() + \
+		" " + constructor_name + " constructor of " + class_name + "." + \
+		get_doc_empty_line(padding) + "\n" + \
+		padding + get_doc_prefix() + "@param other " + class_name + \
+		" from which this object should be created." + \
+		get_doc_last_line(padding)
+
+def make_assignment_doc(class_name, padding, constructor_name, constructor_action):
+	return "\n" + padding + get_doc_block_start() + \
+		" " + constructor_name + " assignment operator of " + class_name + "." + \
+		get_doc_empty_line(padding) + "\n" + \
+		padding + get_doc_prefix() + "@param other " + class_name + " to be " + \
+		constructor_action + " into this object." + get_doc_last_line(padding)
+
+def get_padding():
+	line_nr = int(vim.eval("line('.')")) - 1
+	return re.search("^(\s*)", vim.current.buffer[line_nr]).groups()[0]
+
+# Generate code for the C++ big five.
+def make_big_five(class_name, add_implementation, add_documentation, out_of_class):
+	padding = get_padding()
+
+	suffix = ""
+	identifier = class_name
+	if out_of_class:
+		suffix = "::" + class_name
+		identifier += suffix
+
+	if add_documentation:
+		move_ctor_doc = "\n" + padding + make_constructor_doc(class_name, padding, "Move")
+		copy_assgn_doc = make_assignment_doc(class_name, padding, "Copy", "copied")
+		move_assgn_doc = make_assignment_doc(class_name, padding, "Move", "moved")
+		dtor_doc = "\n" + padding + get_doc_block_start() + \
+			" Destructor of " + class_name + "." + get_doc_commend_ending()
+		swap_doc = "\n" + padding + get_doc_block_start() + \
+			" Swap function specialisation for " + class_name + " objects." + \
+			get_doc_empty_line(padding) + "\n" + \
+			padding + get_doc_prefix() + "@param first " + \
+			"To be swapped with the second object." + "\n" + \
+			padding + get_doc_prefix() + "@param second " + \
+			"To be swapped with the first object." + \
+			get_doc_last_line(padding)
+	else:
+		move_ctor_doc = ""
+		copy_assgn_doc = ""
+		move_assgn_doc = ""
+		dtor_doc = ""
+		swap_doc = "\n"
+
+	return suffix + "(const " + class_name + " &other);\n" + \
+		move_ctor_doc + "\n" + \
+		padding + identifier +"(" + class_name + " &&other) noexcept;\n" + \
+		copy_assgn_doc + "\n" + \
+		padding + identifier +" &operator=(const " + class_name + " &other);\n" + \
+		move_assgn_doc + "\n" + \
+		padding + class_name +" &operator=(" + class_name + " &&other) noexcept;\n" + \
+		dtor_doc + "\n" + \
+		padding + "~" + identifier +"();\n" + \
+		swap_doc + "\n" + \
+		padding + "friend void swap(" + class_name +" &first, " + class_name +" &second);"
 endglobal
 
 snippet cout "Expands to a print statement"
@@ -27,16 +91,6 @@ snip.rv = get_pascal_case(snip.basename)
 	${0}
 }
 endsnippet
-snippet class "Expands to a class skeleton" b
-class ${1:`!p
-snip.rv = get_pascal_case(snip.basename)
-`}
-{
-	public:
-	${1/(\w+).*/$1/}();
-	~${1/(\w+).*/$1/}();
-};
-endsnippet
 snippet enum "Expands to an enum class" b
 enum class ${1:`!p snip.rv = get_pascal_case(snip.basename)`}
 {
@@ -60,6 +114,20 @@ throw std::system_error(errno, std::system_category(), ${1:message});
 endsnippet
 snippet runtime "Expands to throwing an runtime error" b
 throw std::runtime_error(${1:message});
+endsnippet
+
+snippet class "Expands to a class skeleton" b
+class ${1:`!p
+snip.rv = get_pascal_case(snip.basename)
+`}
+{
+	${0}
+};
+endsnippet
+snippet bigfive "Expands to the declaration of the big five" b
+`!p snip.rv = make_constructor_doc(t[1], get_padding(), "Copy")`
+${1:`!p snip.rv = get_pascal_case(snip.basename)`}`!p
+snip.rv = make_big_five(t[1], True, True, False)`
 endsnippet
 
 snippet fore "for each loop skeleton" b
