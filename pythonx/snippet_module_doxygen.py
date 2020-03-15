@@ -5,6 +5,12 @@ import vim
 def uses_single_line_c_comments():
   return vim.eval("&commentstring").startswith("//")
 
+def get_doc_block_start():
+  if uses_single_line_c_comments():
+    return "///"
+  else:
+    return "/**"
+
 def get_doc_empty_line(pre_indented):
   if uses_single_line_c_comments():
     return '\n' + pre_indented + '///'

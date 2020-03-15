@@ -11,11 +11,7 @@ if snip.c == "":
   current_buffer = vim.current.buffer
   next_line_nr = int(vim.eval("line('.')"))
 
-  if uses_single_line_c_comments():
-    prefix = "///"
-  else:
-    prefix = "/**"
-
+  prefix = get_doc_block_start()
   if not re.match("^\s*$", current_buffer[next_line_nr - 1]):
     snip.rv = prefix + "< "
   else:
