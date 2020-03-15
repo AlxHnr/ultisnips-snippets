@@ -19,7 +19,7 @@ else:
 if t[2] and t[2][0] == '*':
   snip.rv = t[2][1:] + " = " + t[2][1:] + "->next"
 else:
-  snip.rv = t[2] + "++"
+  snip.rv = "++" + t[2]
 `)
 {
 	${0}
