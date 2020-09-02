@@ -185,10 +185,10 @@ snippet ms "std::make_shared<...>" w
 std::make_shared<${1}>
 endsnippet
 snippet errno "Expands to throwing an errno message" b
-throw std::system_error(errno, std::system_category(), ${1:message});
+throw std::system_error{errno, std::system_category(), ${1:message}};
 endsnippet
 snippet runtime "Expands to throwing an runtime error" b
-throw std::runtime_error(${1:message});
+throw std::runtime_error{${1:message}};
 endsnippet
 
 snippet class "Expands to a class skeleton" b
