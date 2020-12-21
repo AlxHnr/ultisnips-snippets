@@ -191,7 +191,7 @@ snippet runtime "Expands to throwing an runtime error" b
 throw std::runtime_error{${1:message}};
 endsnippet
 
-snippet class "Expands to a class skeleton" b
+snippet class "Expands to a class skeleton"
 class ${1:`!p
 snip.rv = get_pascal_case(snip.basename)
 `}
