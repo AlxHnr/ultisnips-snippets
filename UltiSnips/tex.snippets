@@ -117,8 +117,15 @@ snippet list "Expands to a bulleted list" b
 endsnippet
 snippet minted "Expands to a minted source code block" b
 \begin{minted}{${1}}
-	${0}
+${0}
 \end{minted}
+endsnippet
+snippet frameminted "Expands to a fragile minted frame"
+\begin{frame}[fragile]\frametitle{${1:\secname}}
+	\begin{minted}{${2:cpp}}
+${0}
+	\end{minted}
+\end{frame}
 endsnippet
 
 snippet multicol "Expands to a two-colum text block" b
