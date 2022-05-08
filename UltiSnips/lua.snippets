@@ -4,37 +4,37 @@ endsnippet
 snippet req "Expands to a local module import" b
 local ${2:$1} = require("${1}")
 endsnippet
-snippet fun "Expands to a local function" b
+snippet "^fun" "Expands to a local function" r
 local function ${1}(${2})
 	${0}
 end
 endsnippet
+snippet ".\bfun" "Expands to an anonymous function" r
+`!p snip.rv = match[0][0]`function(${1})
+	${0}
+end
+endsnippet
 
-snippet if "A simple if condition" b
+snippet if "Expands to an if block" b
 if ${1} then
 	${0}
 end
 endsnippet
-snippet elseif "A simple elseif condition" b
+snippet elseif "Expands to an elseif block" b
 elseif ${1} then
 	
 endsnippet
-snippet else "A simple else condition" b
+snippet else "Expands to an else block" b
 else
 	
 endsnippet
-snippet while "A simple while loop" b
+snippet while "Expands to a while loop" b
 while ${1} do
 	${0}
 end
 endsnippet
-snippet for "A simple for loop" b
-for ${1} do
-	${0}
-end
-endsnippet
-snippet fore "A simple for ... in ... loop" b
-for ${1} in ${2} do
+snippet for "Expands to a for loop" b
+for _, ${1} in ipairs(${2}) do
 	${0}
 end
 endsnippet
