@@ -1,0 +1,52 @@
+snippet d "Expands to a doc comment"
+/// 
+endsnippet
+snippet fun "Expands to a function skeleton"
+fn ${1}($2) ${3:void} {
+	${0}
+}
+endsnippet
+snippet struct "Expands to a struct definition"
+const ${1} = struct {
+	${0}
+};
+endsnippet
+snippet enum "Expands to an enum definition"
+const ${1} = enum {
+	${0}
+};
+endsnippet
+snippet if "Expands to an if statement"
+if (${1}) {
+	${0}
+}
+endsnippet
+snippet else "Expands to an else block"
+else {
+	${0}
+}
+endsnippet
+snippet while "Expands to a while loop"
+while (${1}) : (${2}) {
+	${0}
+}
+endsnippet
+snippet for "Expands to a for loop with a caputre"
+for(${1}) |${2}| {
+	${3}
+}
+endsnippet
+snippet switch "Expands to a switch loop with a caputre"
+switch(${1}) {
+	${3}
+}
+endsnippet
+snippet print "Expands to a print() debug statement" w
+std.debug.print("${1}\n", .{${2}});
+endsnippet
+snippet imp "Expands to an import statement" b
+const ${1} = @import("${2}")${3};
+endsnippet
+snippet assert "Expands to an assert statement" b
+std.debug.assert(${1});
+endsnippet
