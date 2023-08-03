@@ -2,7 +2,7 @@ snippet head "Expands to a hashbang" b
 #!/usr/bin/${1:lua}
 endsnippet
 snippet req "Expands to a local module import" b
-local ${2:$1} = require("${1}")
+local ${2:$1} = require('${1}')
 endsnippet
 snippet "^fun" "Expands to a local function" r
 local function ${1}(${2})
