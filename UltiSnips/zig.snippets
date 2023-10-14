@@ -47,6 +47,17 @@ endsnippet
 snippet imp "Expands to an import statement" b
 const ${1} = @import("${2}")${3};
 endsnippet
+snippet asf "As float conversion" w
+@as(f32, @floatFromInt(${1}))
+endsnippet
 snippet assert "Expands to an assert statement" b
 std.debug.assert(${1});
+endsnippet
+snippet test "Expands to a test skeloton" b
+test "${1}" {
+	${0}
+}
+endsnippet
+snippet expect "Test expect() statement" b
+try expect(${1});
 endsnippet
