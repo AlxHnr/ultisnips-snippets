@@ -50,7 +50,7 @@ endsnippet
 snippet asf "As float conversion" w
 @as(f32, @floatFromInt(${1}))
 endsnippet
-snippet assert "Expands to an assert statement" b
+snippet assert "Expands to an assert statement" w
 std.debug.assert(${1});
 endsnippet
 snippet test "Expands to a test skeloton" b
@@ -60,4 +60,9 @@ test "${1}" {
 endsnippet
 snippet expect "Test expect() statement" b
 try expect(${1});
+endsnippet
+snippet comptime "comptime { ... }" b
+comptime {
+	${0}
+}
 endsnippet
